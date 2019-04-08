@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.partner.dao.PartnerBsOrderInfoDao">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.partner.entity.PartnerBsOrderInfo">
+                    <id column="id" property="id" />
+                    <result column="verification_code" property="verificationCode" />
+                    <result column="order_no" property="orderNo" />
+                    <result column="appoint_date" property="appointDate" />
+                    <result column="order_scan" property="orderScan" />
+                    <result column="public_hair_id" property="publicHairId" />
+                    <result column="user_id" property="userId" />
+                    <result column="goods_id" property="goodsId" />
+                    <result column="store_id" property="storeId" />
+                    <result column="order_status" property="orderStatus" />
+                    <result column="change_status" property="changeStatus" />
+                    <result column="expend_status" property="expendStatus" />
+                    <result column="comment_status" property="commentStatus" />
+                    <result column="create_time" property="createTime" />
+                    <result column="update_time" property="updateTime" />
+                    <result column="version" property="version" />
+                    <result column="order_money" property="orderMoney" />
+                    <result column="employee_id" property="employeeId" />
+                    <result column="station_num" property="stationNum" />
+                    <result column="change_time" property="changeTime" />
+                    <result column="finish_time" property="finishTime" />
+                    <result column="refund_remark" property="refundRemark" />
+                    <result column="refund_by" property="refundBy" />
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+        id, verification_code AS verificationCode, order_no AS orderNo, appoint_date AS appointDate, order_scan AS orderScan, public_hair_id AS publicHairId, user_id AS userId, goods_id AS goodsId, store_id AS storeId, order_status AS orderStatus, change_status AS changeStatus, expend_status AS expendStatus, comment_status AS commentStatus, create_time AS createTime, update_time AS updateTime, version, order_money AS orderMoney, employee_id AS employeeId, station_num AS stationNum, change_time AS changeTime, finish_time AS finishTime, refund_remark AS refundRemark, refund_by AS refundBy
+    </sql>
+</mapper>

@@ -1,0 +1,153 @@
+<html lang="zh">
+<meta charset="utf-8">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/validate/jquery.validate.min.js"></script>
+
+
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/bdialog/b.dialog.bootstrap3.css">
+<link rel="stylesheet" href="/static/css/bdialog/b.dialog.css">
+
+<script src="/static/js/validate/validate-methods.js"></script>
+<!--<script src="/static/js/bdialog/b.dialog.min.js"></script>-->
+<script src="/static/js/bdialog/b.dialog.js"></script>
+<script src="/static/js/bdialog/jquery-ui.min.js"></script>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">用户注册</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="registerForm" class="form-horizontal" >
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="userName">用户名</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="userName"  name="userName" data-options="validType:'mobile',required:true"  placeholder="Username" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="nickName">昵称</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="nickName" data-options="validType:'minLength[2,4]',required:true"  name="nickName" placeholder="Nick Name" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="userMobile">手机号</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="userMobile" data-options="validType:'mobile',required:true" name="userMobile" placeholder="userMobile" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="password">密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="confirm_password" data-options="validType:'same[password]',required:true" >确认密码</label>
+                            <div class="col-sm-5">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-4">
+                                <a href="javascript:void(0)" class="btn btn-primary" onclick="register()">注册</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    body {
+        padding-top: 100px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function register(){
+        if (!$("#registerForm").valid()){
+            return ;
+        }
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/index/userRegister",//url
+            data: $('#registerForm').serialize(),
+            success: function (result) {
+                if (result.code == 200) {
+                    alert("SUCCESS");
+                }else {
+                    bDialog.alert(result.msg);
+                }
+            },
+            error: function () {
+                bDialog.alert('系统异常');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+       $("#registerForm").validate({
+            rules: {
+                userName: { required: true, isMobile: true },
+                password: { required: true, minlength: 6, maxlength: 16 },
+                confirm_password: { required: true, equalTo: "#password" },
+                userMobile: { required: true, isMobile: true },
+                nickName: { required: true, minlength: 2 },
+            },
+            messages: {
+                userName: {
+                    required: "用户名不能为空",
+                    minlength: "用户名的最小长度为2"
+                },
+                password: {
+                    required: "密码不能为空",
+                    minlength: "密码长度不能少于6个字符",
+                    maxlength: "密码长度不能超过16个字符"
+                },
+                confirm_password: {
+                    required: "确认密码不能为空",
+                    equalTo: "确认密码和密码不一致"
+                },
+                userMobile: {
+                    required: "手机号码不能为空",
+                    isMobile: "手机号码错误"
+                },
+                nickName: {
+                    required: "昵称不能为空",
+                    minlength: "昵称最短2个字符"
+                }
+            }
+        });
+    });
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

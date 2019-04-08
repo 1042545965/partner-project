@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.partner.dao.PartnerBsMessageDao">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="com.partner.entity.PartnerBsMessage">
+                    <id column="id" property="id" />
+                    <result column="send_user_id" property="sendUserId" />
+                    <result column="accepter_user_id" property="accepterUserId" />
+                    <result column="netty_message" property="nettyMessage" />
+                    <result column="message_read" property="messageRead" />
+                    <result column="create_time" property="createTime" />
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+        id, send_user_id AS sendUserId, accepter_user_id AS accepterUserId, netty_message AS nettyMessage, message_read AS messageRead, create_time AS createTime
+    </sql>
+</mapper>

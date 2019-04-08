@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/validate/jquery.validate.min.js"></script>
+
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天界面</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <h3 class="text-center">
+                    h3. 这是一套可视化布局系统.
+                </h3>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-8 column">
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <div class="jumbotron pre-scrollable" style="height: 350px" id="userMessage">
+
+                            <h4>我是标题4 h4. <small>我是副标题4 h4</small></h4>
+
+                            <h5>我是标题5 h5. <small>我是副标题5 h5</small></h5>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <div class="row clearfix">
+                            <div class="col-md-8 column">
+                                <textarea class="form-control" id="messageText"></textarea>
+                            </div>
+                            <div class="col-md-4 column">
+                                <a href="javascript:userSend()" class="btn btn-default btn-primary">发送</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 column">
+                <div class="panel panel-default" id="userList">
+                    <!--<div class="panel-heading">
+                        <h3 class="panel-title">
+                           用户列表
+                        </h3>
+                    </div>-->
+
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+            </div>
+        </div>
+    </div>
+</body>
+
+    <script th:inline="javascript">
+        var userId = [[${userId}]];
+        $(function () {
+            var wsServer = 'ws://192.168.1.130:7009/socket?userId='+userId;
+            var websocket = new WebSocket(wsServer);
+            //连接成功建立的回调方法 , 在这里我刷新用户列表
+            websocket.onopen = function (evt) {
+                $("#userList").empty();
+                getUserList();
+            };
+
+            //监听服务器数据推送
+            websocket.onmessage = function (evt) {
+                 var messageModel = JSON.parse(evt.data);
+                $("#userMessage").append("<h4>"+messageModel.sendUserId+"<small>"+messageModel.nettyMessage+"</small></h4>")
+            };
+
+            //监听连接关闭
+            websocket.onclose = function (evt) {
+                alert("连接关闭");
+            };
+
+        })
+
+        function getUserList() {
+            $.ajax({
+                //几个参数需要注意一下
+                type: "GET",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/partnerBsMessage/getLinkUserList",//url
+                data: "",
+                success: function (result) {
+                    if (result.code == 200) {
+                        var userList = result.payload;
+                        var userListStr = ""
+                        for (var i = 0; i < userList.length; i++) {
+                            userListStr +='<div class="panel-footer" data-id="'+userList[i].id+'">'+userList[i].nickName+'</div>'
+                        }
+                        $("#userList").append(userListStr);
+                    }else {
+
+                    }
+                },
+                error: function () {
+                    alert('用户列表加载失败');
+                }
+            });
+
+        }
+
+        function userSend() {
+            var messageText = $("#messageText").val();
+            $.ajax({
+                //几个参数需要注意一下
+                type: "GET",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/partnerBsMessage/putMessageAll",
+                data: {"nettyMessage":messageText , "sendUserId": userId},
+                success: function (result) {
+                    if (result.code == 200) {
+                        // $("#userMessage").append("<h4>"+userId+"<small>"+messageText+"</small></h4>")
+                    }
+                },
+
+            });
+        }
+
+    </script>
+</html>
